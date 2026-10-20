@@ -1,0 +1,82 @@
+# AppArmor Profile for Python Flask Application
+# Profile Name: my-apparmor-profile
+# Suitable for Docker container confinement via --security-opt apparmor=my-apparmor-profile
+
+#include <tunables/global>
+
+profile my-apparmor-profile flags=(attach_disconnected,mediate_deleted) {
+    # Include base abstractions for POSIX baseline operations
+    #include <abstractions/base>
+    #include <abstractions/nameservice>
+
+    # Network operations: allow stream/dgram sockets for HTTP service on port 5000
+    network inet stream,
+    network inet6 stream,
+    network inet dgram,
+    network inet6 dgram,
+
+    # Deny access to sensitive files and credentials
+    deny /etc/shadow* rwklx,
+    deny /etc/gshadow* rwklx,
+    deny /etc/passwd* rwklx,
+    deny /etc/sudoers* rwklx,
+    deny /etc/ssh/** rwklx,
+    deny /root/** rwklx,
+    deny /var/log/** rw,
+
+    # Permit necessary system configuration files for libc/DNS resolution
+    /etc/ld.so.cache r,
+    /etc/ld.so.preload r,
+    /etc/localtime r,
+    /etc/timezone r,
+    /etc/nsswitch.conf r,
+    /etc/resolv.conf r,
+    /etc/hosts r,
+    /etc/group r,
+    /etc/issue r,
+    /etc/os-release r,
+
+    # Python interpreter runtime and library access
+    /usr/local/bin/python* ixr,
+    /usr/bin/python* ixr,
+    /usr/local/lib/python*/** r,
+    /usr/lib/python*/** r,
+    /lib/** mr,
+    /lib64/** mr,
+    /usr/lib/** mr,
+    /usr/local/lib/** mr,
+
+    # Application directory: allow reading application files
+    /app/** r,
+    /app/ r,
+
+    # Temporary directory writing (Flask/Python scratch space)
+    /tmp/** rwk,
+
+    # Linux kernel pseudofiles and devices required by Python
+    /dev/null rw,
+    /dev/zero r,
+    /dev/random r,
+    /dev/urandom r,
+    /dev/tty rw,
+    /proc/ r,
+    /proc/** r,
+    /sys/ r,
+    /sys/** r,
+
+    # Deny execution of interactive shells and dangerous system binaries
+    deny /bin/bash x,
+    deny /bin/sh x,
+    deny /bin/dash x,
+    deny /usr/bin/bash x,
+    deny /usr/bin/sh x,
+    deny /usr/bin/dash x,
+
+    # Capability restrictions: only permit binding service ports, deny privileged capabilities
+    capability net_bind_service,
+    deny capability sys_admin,
+    deny capability sys_rawio,
+    deny capability sys_ptrace,
+    deny capability dac_override,
+    deny capability dac_read_search,
+}
