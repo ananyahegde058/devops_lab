@@ -1,86 +1,164 @@
+
 pipeline {
     agent any
 
     environment {
-        DEPLOY_DIR = "${WORKSPACE}/python-app-deploy"
+        APP_DIR = 'Exercise_9_Jenkins_Multi_Stage_Pipeline'
         APP_PORT = '5000'
     }
 
     stages {
+        stage('Checkout SCM') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/ananyahegde058/devops_lab.git'
+
+                dir('Exercise_9_Jenkins_Multi_Stage_Pipeline') {
+                    echo 'Source code checked out successfully.'
+                    sh 'ls -la'
+                }
+            }
+        }
+
         stage('Build') {
             steps {
-                echo '=== Stage 1: Build & Dependency Resolution ==='
-                echo 'Checking Python environment and installing dependencies...'
-                sh '''
-                python3 --version || python --version
-                pip3 install -r requirements.txt || pip install -r requirements.txt
-                '''
+                dir('Exercise_9_Jenkins_Multi_Stage_Pipeline') {
+                    echo '=== Stage 1: Build & Dependency Resolution ==='
+
+                    sh '''
+                        set -e
+                        python3 --version
+                        python3 -m venv .venv
+                        .venv/bin/python -m pip install --upgrade pip
+                        .venv/bin/python -m pip install -r requirements.txt
+                        .venv/bin/python -m py_compile app.py test_app.py
+                    '''
+                }
             }
         }
 
         stage('Test') {
             steps {
-                echo '=== Stage 2: Automated Unit Testing ==='
-                echo 'Running unit test suite using unittest...'
-                sh 'python3 -m unittest discover -s . || python -m unittest discover -s .'
+                dir('Exercise_9_Jenkins_Multi_Stage_Pipeline') {
+                    echo '=== Stage 2: Run Unit Tests ==='
+
+                    sh '''
+                        set -e
+                        .venv/bin/python -m unittest discover \
+                            -s . -p "test*.py" -v
+                    '''
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo '=== Stage 3: Application Deployment ==='
-                echo "Deploying application to ${env.DEPLOY_DIR}..."
-                sh '''
-                mkdir -p ${DEPLOY_DIR}
-                cp app.py ${DEPLOY_DIR}/
-                cp requirements.txt ${DEPLOY_DIR}/
-                '''
+                dir('Exercise_9_Jenkins_Multi_Stage_Pipeline') {
+                    echo '=== Stage 3: Prepare Deployment ==='
+
+                    sh '''
+                        set -e
+                        test -f app.py
+                        test -f requirements.txt
+                        echo "Deployment preparation successful." \
+                            > output/deployment_verification.txt
+                        cat output/deployment_verification.txt
+                    '''
+                }
             }
         }
 
         stage('Run Application') {
             steps {
-                echo '=== Stage 4: Run Application Service ==='
-                echo 'Launching deployed application in background...'
-                sh '''
-                if [ -f ${DEPLOY_DIR}/app.pid ]; then
-                    kill -9 $(cat ${DEPLOY_DIR}/app.pid) || true
-                fi
-                nohup python3 ${DEPLOY_DIR}/app.py > ${DEPLOY_DIR}/app.log 2>&1 &
-                echo $! > ${DEPLOY_DIR}/app.pid
-                sleep 3
-                '''
+                dir('Exercise_9_Jenkins_Multi_Stage_Pipeline') {
+                    echo '=== Stage 4: Start Python Application ==='
+
+                    sh '''
+                        set -e
+
+                        if [ -f app.pid ] &&
+                           kill -0 "$(cat app.pid)" 2>/dev/null; then
+                            kill "$(cat app.pid)" || true
+                            sleep 2
+                        fi
+
+                        rm -f app.pid
+
+                        nohup .venv/bin/python app.py \
+                            > app.log 2>&1 &
+
+                        echo $! > app.pid
+                        sleep 5
+
+                        if ! kill -0 "$(cat app.pid)" 2>/dev/null; then
+                            cat app.log
+                            exit 1
+                        fi
+
+                        echo "Application process started."
+                        cat app.log
+                    '''
+                }
             }
         }
 
         stage('Test Application') {
             steps {
-                echo '=== Stage 5: End-to-End Verification ==='
-                echo 'Executing verification tests against running deployment...'
-                sh '''
-                python3 test_app.py || python test_app.py
-                curl -s http://localhost:5000/ || true
-                '''
+                dir('Exercise_9_Jenkins_Multi_Stage_Pipeline') {
+                    echo '=== Stage 5: Verify Application ==='
+
+                    sh '''
+                        set -e
+
+                        .venv/bin/python -c "
+import time
+import urllib.request
+
+url = 'http://127.0.0.1:5000/'
+last_error = None
+
+for attempt in range(15):
+    try:
+        with urllib.request.urlopen(url, timeout=3) as response:
+            print('HTTP status:', response.status)
+            print('Application response:', response.read().decode()[:500])
+            if response.status == 200:
+                break
+    except Exception as error:
+        last_error = error
+        time.sleep(2)
+else:
+    raise SystemExit('Application health check failed: ' + str(last_error))
+"
+                    '''
+                }
             }
         }
     }
 
     post {
-        always {
-            echo 'Pipeline execution complete.'
-            sh '''
-            if [ -f ${DEPLOY_DIR}/app.pid ]; then
-                echo "Cleaning up background application process..."
-                kill -9 $(cat ${DEPLOY_DIR}/app.pid) || true
-                rm -f ${DEPLOY_DIR}/app.pid
-            fi
-            '''
-        }
         success {
-            echo 'SUCCESS: All pipeline stages completed successfully!'
+            echo 'SUCCESS: All pipeline stages completed.'
         }
+
         failure {
-            echo 'FAILURE: Pipeline failed. Check console logs for error diagnostics.'
+            echo 'FAILURE: Check Console Output for the error.'
+        }
+
+        always {
+            script {
+                if (fileExists("${env.WORKSPACE}/${env.APP_DIR}/app.pid")) {
+                    sh '''
+                        if [ -f Exercise_9_Jenkins_Multi_Stage_Pipeline/app.pid ]; then
+                            PID=$(cat Exercise_9_Jenkins_Multi_Stage_Pipeline/app.pid)
+                            kill "$PID" 2>/dev/null || true
+                            rm -f Exercise_9_Jenkins_Multi_Stage_Pipeline/app.pid
+                        fi
+                    '''
+                }
+            }
+
+            echo 'Pipeline execution complete.'
         }
     }
 }
