@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ananya Hegde — Systems &amp; Networks Engineer</title>
+<meta name="description" content="Ananya Hegde — backend engineer, networks researcher, and ML builder. Published congestion-control research, full-stack projects, and open-source contributions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav id="topnav">
+  <a href="#top" class="brand">AH<span>.</span></a>
+  <div class="nav-links">
+    <a href="#work"><span>01</span>Work</a>
+    <a href="#research"><span>02</span>Research</a>
+    <a href="#experience"><span>03</span>Experience</a>
+    <a href="#skills"><span>04</span>Skills</a>
+    <a href="#contact"><span>05</span>Contact</a>
+  </div>
+  <button id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<header id="top" class="hero">
+  <div class="blueprint-grid" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">SYS-001 · BACKEND / NETWORKS / ML</p>
+    <h1>Ananya Hegde</h1>
+    <p class="hero-tag">I trace how data finds its way through congested networks —
+      then build the backends that route it.</p>
+    <p class="hero-sub">Engineering student at BMS College of Engineering (CGPA 9.56). Published
+      networking researcher, full-stack builder, and open-source contributor.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="mailto:ananyahegde058@gmail.com">Get in touch</a>
+      <a class="btn btn-ghost" href="https://github.com/ananyahegde058" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/ananya-hegde-505790342/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="topology-wrap" aria-hidden="true">
+    <svg id="topology" viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+      <!-- static topology paths drawn via JS-injected packets; base structure below -->
+      <g class="topo-lines" stroke="#B9C6D6" stroke-width="2" fill="none">
+        <path d="M120,80 C260,80 260,180 380,180" />
+        <path d="M120,280 C260,280 260,180 380,180" />
+        <path d="M380,180 L620,180" />
+        <path d="M620,180 C740,180 740,80 880,80" />
+        <path d="M620,180 C740,180 740,280 880,280" />
+      </g>
+      <g class="topo-nodes">
+        <g class="node" transform="translate(120,80)">
+          <circle r="22"/><text y="42">Sender A</text>
+        </g>
+        <g class="node" transform="translate(120,280)">
+          <circle r="22"/><text y="42">Sender B</text>
+        </g>
+        <g class="node bottleneck" transform="translate(500,180)">
+          <rect x="-46" y="-24" width="92" height="48" rx="6"/>
+          <text y="46">Forwarding Node</text>
+          <text class="sub" y="62">single contention point</text>
+        </g>
+        <g class="node" transform="translate(880,80)">
+          <circle r="22"/><text y="42">Receiver A</text>
+        </g>
+        <g class="node" transform="translate(880,280)">
+          <circle r="22"/><text y="42">Receiver B</text>
+        </g>
+      </g>
+      <g id="packets"></g>
+    </svg>
+    <div class="topo-legend">
+      <span><i style="background:#C1622B"></i>Cubic</span>
+      <span><i style="background:#2F7B6E"></i>Reno</span>
+      <span><i style="background:#3E6FB0"></i>BBR</span>
+    </div>
+    <p class="topo-caption">Live sketch of the 4-node dumbbell topology from my Scientific&nbsp;Reports (Nature) study on TCP congestion control</p>
+  </div>
+
+  <a class="scroll-cue" href="#work"><span></span>Scroll</a>
+</header>
+
+<main>
+
+  <!-- WORK -->
+  <section id="work" class="section">
+    <div class="section-head">
+      <p class="tick">01 — Work</p>
+      <h2>Projects</h2>
+    </div>
+
+    <div class="card-grid">
+      <article class="card">
+        <div class="card-top">
+          <h3>Smart Expense Tracker &amp; Budget Planner</h3>
+          <a href="https://github.com/ananyahegde058" target="_blank" rel="noopener" class="card-link">Repo ↗</a>
+        </div>
+        <p>A full-stack personal finance app: FastAPI backend, vanilla JS frontend, JWT auth,
+          and SQLAlchemy ORM (PostgreSQL in production, SQLite locally). REST APIs cover
+          expense CRUD, category budgeting, and Chart.js analytics dashboards, deployed on
+          Render with Git-based auto-deploy.</p>
+        <p class="highlight">Diagnosed a production outage where the host blocked outbound SMTP,
+          and rerouted email delivery through an HTTPS-based REST API to restore account
+          verification and password resets.</p>
+        <ul class="tags">
+          <li>Python</li><li>FastAPI</li><li>JavaScript</li><li>SQLAlchemy</li>
+          <li>PostgreSQL</li><li>JWT</li><li>Render</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>ML Real Estate Price Prediction &amp; Fraud Detection</h3>
+          <a href="https://github.com/ananyahegde058" target="_blank" rel="noopener" class="card-link">Repo ↗</a>
+        </div>
+        <p>A machine learning pipeline that predicts property prices and flags fraudulent
+          listings from real estate data. Cleaned and encoded a messy categorical dataset,
+          then paired a regression model for pricing with a classifier for fraud signals.</p>
+        <ul class="tags">
+          <li>Python</li><li>Scikit-learn</li><li>Pandas</li><li>NumPy</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research" class="section alt">
+    <div class="section-head">
+      <p class="tick">02 — Research</p>
+      <h2>Publication</h2>
+    </div>
+
+    <article class="paper-card">
+      <div class="paper-meta">
+        <span class="paper-badge">Scientific Reports · Nature · 2026</span>
+        <a href="https://doi.org/10.1038/s41598-026-61100-w" target="_blank" rel="noopener" class="card-link">DOI: 10.1038/s41598-026-61100-w ↗</a>
+      </div>
+      <h3>TCP Congestion Control Performance Evaluation in Cloud-Based Networks</h3>
+      <p>An independently designed and implemented experimental system comparing TCP Cubic,
+        Reno, and BBR across four distinct workload types, run on a 4-node dumbbell topology
+        built on AWS EC2 (m7i-flex.large) with a dedicated forwarding node and static routing
+        forcing all traffic through a single contention point.</p>
+      <p>Automated workload generation across iperf3, Kafka &amp; Flink, and Hadoop TeraSort
+        measured throughput, latency, retransmissions, and job completion time — producing
+        workload-specific congestion-control guidance for multi-tenant cloud deployments.</p>
+      <ul class="tags">
+        <li>AWS EC2</li><li>Linux Networking</li><li>iperf3</li><li>Apache Kafka</li>
+        <li>Apache Flink</li><li>Hadoop</li><li>Python</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section">
+    <div class="section-head">
+      <p class="tick">03 — Experience</p>
+      <h2>Experience &amp; Education</h2>
+    </div>
+
+    <div class="split">
+      <div class="timeline">
+        <div class="t-item">
+          <p class="t-date">Jul 2025 – Oct 2025</p>
+          <h3>Open Source Contributor — GirlScript Summer of Code (GSSoC)</h3>
+          <p>Resolved issues and shipped features across open-source projects. Reviewed
+            code and raised pull requests alongside a global contributor base, building
+            fluency with Git, GitHub, and collaborative development workflows.</p>
+        </div>
+      </div>
+
+      <div class="edu-list">
+        <div class="edu-item">
+          <p class="t-date">2023 – Present</p>
+          <h3>BMS College of Engineering</h3>
+          <p>Bachelor of Engineering · CGPA 9.56</p>
+        </div>
+        <div class="edu-item">
+          <p class="t-date">2021 – 2023</p>
+          <h3>Sir MV PU College</h3>
+          <p>Class 12 · 95.6%</p>
+        </div>
+        <div class="edu-item">
+          <p class="t-date">2020 – 2021</p>
+          <h3>Satya Sai Divya Jyothi Vidya Kendra</h3>
+          <p>Class 10 · 91.3%</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section alt">
+    <div class="section-head">
+      <p class="tick">04 — Skills</p>
+      <h2>Skills &amp; Certifications</h2>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <ul class="tags"><li>Java</li><li>Python</li><li>SQL</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>Backend &amp; APIs</h4>
+        <ul class="tags"><li>FastAPI</li><li>REST API Design</li><li>JWT Authentication</li><li>SQLAlchemy</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>Cloud, Networking &amp; Data Systems</h4>
+        <ul class="tags"><li>AWS (EC2)</li><li>Google Cloud (Certified)</li><li>TCP/IP &amp; Congestion Control</li><li>Linux</li><li>Apache Kafka</li><li>Apache Flink</li><li>Hadoop</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>Databases &amp; Tools</h4>
+        <ul class="tags"><li>PostgreSQL</li><li>SQLite</li><li>Git</li><li>GitHub</li><li>Render</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>AI/ML &amp; Data Analysis</h4>
+        <ul class="tags"><li>NumPy</li><li>Pandas</li><li>Scikit-learn</li><li>iperf3</li></ul>
+      </div>
+    </div>
+
+    <div class="cert-list">
+      <div class="cert-item">
+        <p class="t-date">Apr 2026</p>
+        <p>Google Cloud Certification — Cloud Engineer Track, Google Cloud Career Launchpad</p>
+      </div>
+      <div class="cert-item">
+        <p class="t-date">NPTEL</p>
+        <p>Silver Medal (Top 5%) — Data Structures and Algorithms in Java, IIT Kharagpur</p>
+      </div>
+      <div class="cert-item">
+        <p class="t-date">LeetCode</p>
+        <p>Best contest rank: 1502 (Top 43.97%)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section contact-section">
+    <div class="section-head">
+      <p class="tick">05 — Contact</p>
+      <h2>Let's talk</h2>
+    </div>
+    <p class="contact-lede">Open to backend, networking, and ML engineering roles &amp; internships.</p>
+    <div class="contact-grid">
+      <a class="contact-card" href="mailto:ananyahegde058@gmail.com">
+        <span class="label">Email</span>
+        <span class="value">ananyahegde058@gmail.com</span>
+      </a>
+      <a class="contact-card" href="tel:+918762779361">
+        <span class="label">Phone</span>
+        <span class="value">+91-8762779361</span>
+      </a>
+      <a class="contact-card" href="https://github.com/ananyahegde058" target="_blank" rel="noopener">
+        <span class="label">GitHub</span>
+        <span class="value">github.com/ananyahegde058</span>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/ananya-hegde-505790342/" target="_blank" rel="noopener">
+        <span class="label">LinkedIn</span>
+        <span class="value">ananya-hegde-505790342</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Designed &amp; built by Ananya Hegde · <span id="year"></span></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
