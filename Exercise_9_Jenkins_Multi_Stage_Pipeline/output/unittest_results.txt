@@ -1,7 +1,0 @@
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.033s
-
-OK
-
-[TEST LOG] Received response: Hello, Jenkins Multi-Stage Pipeline!
