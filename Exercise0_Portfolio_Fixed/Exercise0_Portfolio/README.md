@@ -1,6 +1,6 @@
 # 🌐 Ananya Hegde — Portfolio
 
-**🔗 Live Portfolio:** https://ananyahegde058.github.io/devops_lab1/A0_Portfolio/
+**🔗 Live Portfolio:** https://ananyahegde058.github.io/devops_lab/
 
 Welcome to my personal portfolio and DevOps learning repository.
 
@@ -9,9 +9,9 @@ This repository contains my portfolio, DevOps lab assignments, projects, and rel
 ## 📁 Repository Structure
 
 ```text
-devops_lab1/
+devops_lab/
 │
-├── A0_Portfolio/
+├── Exercise0_Portfolio/
 │   ├── index.html
 │   ├── styles.css
 │   ├── script.js
@@ -31,7 +31,7 @@ devops_lab1/
 
 ## 🎨 A0 — Portfolio
 
-The `A0_Portfolio` folder contains my personal portfolio website.
+The `Exercise0_Portfolio` folder contains my personal portfolio website.
 
 It is built using:
 
@@ -43,11 +43,11 @@ No external build tools or dependencies are required.
 
 ## 🚀 Deployment
 
-The portfolio is hosted using **GitHub Pages** from the `main` branch.
+The portfolio is deployed using **GitHub Pages** with a GitHub Actions workflow.
 
-**Repository:** `ananyahegde058/devops_lab1`
+**Repository:** `ananyahegde058/devops_lab`
 
-Whenever changes are pushed to the `main` branch, GitHub Pages automatically updates the deployed website.
+Whenever changes are pushed to `Exercise0_Portfolio/` on the `main` branch, the workflow deploys this folder to the site homepage.
 
 ## 🛠️ Technologies Used
 
@@ -66,7 +66,7 @@ Each assignment will be maintained in its own folder to keep the repository orga
 
 | Folder          | Content                       |
 | --------------- | ----------------------------- |
-| `A0_Portfolio`  | Personal portfolio            |
+| `Exercise0_Portfolio`  | Personal portfolio            |
 | `A1_Assignment` | Assignment 1                  |
 | `A2_Assignment` | Assignment 2                  |
 | `A3_Assignment` | Assignment 3                  |
